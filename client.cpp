@@ -26,14 +26,7 @@ read_transition_table(const std::string& filename) {
     return table;
 }
 
-// Must exactly match the secure Obliv-C unmasker.
-//
-// FLORAM's scan ROM constructs an IV whose final sizeof(size_t) bytes contain
-// the block index in big-endian order. For one 64-bit DFA word we use:
-//
-//     IV = 0000000000000000 || BE64(index)
-//     F(k,index) = first 8 bytes of AES-128_k(IV)
-//
+
 static std::uint64_t prf_u64(const Block& key, std::uint64_t index) {
     AES_KEY aes_key{};
     if (AES_set_encrypt_key(key.data(), 128, &aes_key) != 0)
